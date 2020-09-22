@@ -2,42 +2,43 @@ var todoList = [];
 
 function postTodo(e) {
   e.preventDefault();
-  if (!document.getElementById("todo-text").value.length) return;
+  if (!$("#todo-text").val()) return;
   todoList.push({
-    text: document.getElementById("todo-text").value,
+    text: $("#todo-text").val(),
     checked: false,
   });
-  document.getElementById("todo-text").value = "";
+  $("#todo-text").val("");
   updateTodoListHTML();
 }
 
 function updateTodoListHTML() {
-  document.getElementById("todo-list-container").innerHTML = "";
-  var node;
-  var checkbox;
-  for (todo in todoList) {
-    node = document.createElement("LI");
-    checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = todoList[todo].checked;
-    node.appendChild(checkbox);
-    node.appendChild(document.createTextNode(`  ${todoList[todo].text}`));
-    document.getElementById("todo-list-container").appendChild(node);
+  $("#todo-list-container").empty();
+  for (todo of todoList) {
+    $("#todo-list-container").append(`
+      <li>
+        <input
+          type="checkbox"
+          ${todo.checked ? "checked" : ""} />
+        <label>
+          ${todo.text}
+        </label>
+      </li>
+    `);
   }
 }
 
 function clearTodos(e) {
   e.preventDefault();
-  for (todo in todoList) {
-    todoList[todo].checked = false;
+  for (todo of todoList) {
+    todo.checked = false;
   }
   updateTodoListHTML();
 }
 
 function markTodos(e) {
   e.preventDefault();
-  for (todo in todoList) {
-    todoList[todo].checked = true;
+  for (todo of todoList) {
+    todo.checked = true;
   }
   updateTodoListHTML();
 }
@@ -48,7 +49,7 @@ function deleteTodos(e) {
   updateTodoListHTML();
 }
 
-document.getElementById("post-todo").addEventListener("click", postTodo);
-document.getElementById("clear-todos").addEventListener("click", clearTodos);
-document.getElementById("mark-todos").addEventListener("click", markTodos);
-document.getElementById("delete-todos").addEventListener("click", deleteTodos);
+$("#post-todo").on("click", postTodo);
+$("#clear-todos").on("click", clearTodos);
+$("#mark-todos").on("click", markTodos);
+$("#delete-todos").on("click", deleteTodos);
